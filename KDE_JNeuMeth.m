@@ -13,6 +13,7 @@ features = zscore(features);
 
 X = cell2mat(labels(1:end,1));
 %% K-Fold Cross Validation
+% Chnage value of K to perform k-fold cross validation. 
 K = 10; %
 indices = crossvalind('Kfold',X,K);
 testData=[];
@@ -57,6 +58,7 @@ for k = 1:K
     ksize = (s1+s2)/2;
     
     % Split Mushroom, Stubby, and Thin Feature sets
+    % Change here if number of classes is different than 3.
     mi = 1; si = 1; ti =1;
     trainFt_m = [];
     trainFt_s = [];
@@ -76,6 +78,7 @@ for k = 1:K
   
     lrt = [];
     %% For testing: compute likelihoods for all test samples.
+    % Change here if number of classes is different than 3.
     for t = 1: size(testFt,1)
         
         dist_m = computeDist(testFt(t,:), trainFt_m);
@@ -121,6 +124,7 @@ confusionMatrix_KDE = confusionmat(testLabels, class)
 
 ht = [L_s;L_t]';
 % to print histogram of 2D lr-space
+ % Change here if number of classes is different than 3.
 figure;
 hist3(ht(find(testLabels == 1),:),{0:0.5:2 0:0.5:2},'FaceColor','red','FaceAlpha',.65); hold on;
 hist3(ht(find(testLabels == 2),:),{0:0.5:2 0:0.5:2},'FaceColor','yellow','FaceAlpha',0.65); hold on;
@@ -130,14 +134,15 @@ xlabel('L_s');
 ylabel('L_t');
 grid on;
 set(gcf,'renderer','opengl');
-% 
-% 
+
+% Change here if number of classes is different than 3.
 ht_m = ht(testLabels==1,:);
 ht_s = ht(testLabels==2,:);
 ht_t = ht(testLabels==3,:);
 
 
 %% MANOVA test
+% Change here if number of classes is different than 3.
 [d,p,stats] = manova1([L_s;L_t]',testLabels');
 
 m_s = [ht_m;ht_s]; labels_m_s = [testLabels(testLabels==1),testLabels(testLabels==2)]; 
@@ -147,7 +152,8 @@ s_t = [ht_t;ht_s]; labels_s_t = [testLabels(testLabels==3),testLabels(testLabels
 [d,p] = manova1(m_t,labels_m_t')
 [d,p] = manova1(s_t,labels_s_t')
 
-% %% t-test
+%% t-test
+% Change here if number of classes is different than 3.
 [H, pValue, KSstatistic] = kstest_2s_2d(ht_m, ht_s, 0.05)
 [H, pValue, KSstatistic] = kstest_2s_2d(ht_m, ht_t, 0.05)
 [H, pValue, KSstatistic] = kstest_2s_2d(ht_t, ht_s, 0.05)
